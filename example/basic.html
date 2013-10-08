@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example Usage</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../jquery.nouislider.css" />
+  </head>
+  <body>
+    <div id="example"></div>
+    <script src="../bower_components/jquery/jquery.min.js"></script>
+    <script src="../jquery.nouislider.js"></script>
+    <script>
+    defaultOptions = {
+      start: [20, 30],
+      range: [10, 40],
+      connect: true,
+      handles: 2
+    }
+    $('#example').noUiSlider(defaultOptions)
+    </script>
+  </body>
+</html>
