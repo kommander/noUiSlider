@@ -55,6 +55,10 @@
 		border: 1px solid #DDD;
 	}
 
+	.noUi-handle-inner {
+		color: #333;
+	}
+
 /*	Styling-only classes;
  *		Structured to prevent double declarations
  *		for various states of the slider.

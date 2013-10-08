@@ -32,6 +32,7 @@
 				,'handles'			// 12
 				,'noUi-background'	// 13
 				,'noUi-z-index'		// 14
+				,'noUi-handle-inner'// 15
 			]
 			// Define an extendible object with base classes for the various
 			// structure elements in the slider. These can be extended by simply
@@ -415,7 +416,7 @@
 				,handles = handle.data('nui').base.data(clsList[12])
 				// Get some settings from the handle;
 				,style = handle.data('nui').style
-				,hLimit;
+				,hLimit, inner, formatted;
 
 			// Make sure the value can be parsed.
 			// This will catch any potential NaN, even though
@@ -477,10 +478,17 @@
 			// Set handle to new location
 			handle.css( style , to + '%' );
 
+			formatted = format ( percentage.is( nui.range, to ), handle.data('nui').target );
+
 			// Write the value to the serialization object.
 			handle.data('store').val(
-				format ( percentage.is( nui.range, to ), handle.data('nui').target )
+				formatted
 			);
+
+      inner = handle.data('nui').inner;
+      if( inner ) {
+        inner.text( formatted );
+      }
 
 			return true;
 
@@ -765,7 +773,7 @@
 				target.addClass(clsList[6]);
 
 				// Base is the internal main 'bar'.
-				var  i, style, decimals, handle
+				var  i, style, decimals, handle, inner
 					,base = $('<div/>').appendTo(target)
 					,handles = []
 					,cls = {
@@ -871,21 +879,29 @@
 					handle.children()
 						.on(actions.start, { base: base, handle: handle }, start)
 						.on(actions.end, { base: base, handle: handle }, selfEnd);
+					
+					// If handle values should be shown within the handle itself,
+					// create an inner element to hold the value
+					if( options.inHandle === true ) {
+						inner = $('<div/>').addClass(clsList[15]);
+            handle.children().append(inner);
+					}
 
-					// Make sure every handle has access to all primary
-					// variables. Can't uses jQuery's .data( obj ) structure
-					// here, as 'store' needs some values from the 'nui' object.
-					handle.data('nui', {
-						 target: target
-						,decimals: decimals
-						,options: options
-						,base: base
-						,style: style
-						,number: i
-					}).data('store', store (
-						 handle
-						,options.S
-					));
+          // Make sure every handle has access to all primary
+          // variables. Can't uses jQuery's .data( obj ) structure
+          // here, as 'store' needs some values from the 'nui' object.
+          handle.data('nui', {
+             target: target
+            ,decimals: decimals
+            ,options: options
+            ,base: base
+            ,style: style
+            ,number: i
+            ,inner: options.inHandle === true ? inner : null
+          }).data('store', store (
+             handle
+            ,options.S
+          ));
 
 					// Attach a function to the native DOM element,
 					// since jQuery wont let me get the current value in percentages.
